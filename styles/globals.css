@@ -1,3 +1,11 @@
+:root {
+--blue-500: #3b82f6;
+--white: #fff;
+--slate-200: rgb(226 232 240);
+--slate-400: rgb(148 163 184);
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,3 +13,5 @@
 html {
 @apply bg-black
 }
+
+
