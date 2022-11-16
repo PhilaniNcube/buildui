@@ -68,14 +68,23 @@ const Carousel = () => {
 
           <div className="flex h-14 absolute justify-center inset-x-0 bottom-6 overflow-hidden">
             <motion.div
-              animate={{ x: `-${(index * 100 * (1/3)) / (3/2) }%` }}
-              className="aspect-[3/2] flex"
+              animate={{
+                x: `-${
+                  index * 100 * (collapsedAspectRatio / fullAspectRatio)
+                }%`,
+              }}
+              style={{aspectRatio: fullAspectRatio}}
+              className="flex"
             >
               {images.map((image, i) => (
                 <button
                   key={image}
                   onClick={() => setIndex(i)}
-                  className={`${i === index ? "aspect-[3/2]" : "aspect-[1/3]"}  shrink-0`}
+                  style={{
+                    aspectRatio:
+                      i === index ? fullAspectRatio : collapsedAspectRatio,
+                  }}
+                  className={`shrink-0`}
                 >
                   <Image
                     src={image}
