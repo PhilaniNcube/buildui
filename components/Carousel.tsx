@@ -12,6 +12,9 @@ let images = [
   "/images/image-6.jpeg",
 ]
 
+let collapsedAspectRatio = 1/3
+let fullAspectRatio = 3/2
+
 const Carousel = () => {
 
   let [index, setIndex] = useState(0)
@@ -19,7 +22,7 @@ const Carousel = () => {
   return (
     <MotionConfig transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }}>
       <div className="h-screen bg-bglack">
-        <div className="mx-auto flex h-full max-w-7xl flex-col justify-center">
+        <div className="mx-auto flex h-[80vh] max-w-7xl flex-col justify-center">
           <div className="relative overflow-hidden">
             <motion.div animate={{ x: `-${index * 100}%` }} className="flex">
               {images.map((image) => (
@@ -29,7 +32,7 @@ const Carousel = () => {
                   alt="Image"
                   width={1920}
                   height={1280}
-                  className="aspect-video object-cover"
+                  className="aspect-video object-cover w-full h-full"
                 />
               ))}
             </motion.div>
@@ -61,6 +64,29 @@ const Carousel = () => {
                 </motion.button>
               )}
             </AnimatePresence>
+          </div>
+
+          <div className="flex h-14 absolute justify-center inset-x-0 bottom-6 overflow-hidden">
+            <motion.div
+              animate={{ x: `-${(index * 100 * (1/3)) / (3/2) }%` }}
+              className="aspect-[3/2] flex"
+            >
+              {images.map((image, i) => (
+                <button
+                  key={image}
+                  onClick={() => setIndex(i)}
+                  className={`${i === index ? "aspect-[3/2]" : "aspect-[1/3]"}  shrink-0`}
+                >
+                  <Image
+                    src={image}
+                    alt="Image"
+                    width={1920}
+                    height={1280}
+                    className="h-full object-cover"
+                  />
+                </button>
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>
