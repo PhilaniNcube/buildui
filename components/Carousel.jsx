@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {ChevronLeftIcon, ChevronRightIcon} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import {AnimatePresence, motion, MotionConfig} from 'framer-motion'
+import useKeypress from 'react-use-keypress'
 
 let images = [
   "/images/image-1.jpeg",
@@ -14,10 +15,24 @@ let images = [
 
 let collapsedAspectRatio = 1/3
 let fullAspectRatio = 3/2
+let margin = 10
+let gap = 2
 
 const Carousel = () => {
 
   let [index, setIndex] = useState(0)
+
+  useKeypress('ArrowRight', () =>  {
+    if(index < images.length - 1) {
+      setIndex(index + 1)
+    }
+  })
+
+  useKeypress('ArrowLeft', () =>  {
+    if(index > 0) {
+      setIndex(index - 1)
+    }
+  })
 
   return (
     <MotionConfig transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }}>
@@ -68,22 +83,37 @@ const Carousel = () => {
 
           <div className="flex h-14 absolute justify-center inset-x-0 bottom-6 overflow-hidden">
             <motion.div
+               initial={false}
               animate={{
                 x: `-${
-                  index * 100 * (collapsedAspectRatio / fullAspectRatio)
+                  index * 100 * (collapsedAspectRatio / fullAspectRatio) + margin + index * gap
                 }%`,
               }}
-              style={{aspectRatio: fullAspectRatio}}
+              style={{ aspectRatio: fullAspectRatio, gap: `${gap}%` }}
               className="flex"
             >
               {images.map((image, i) => (
-                <button
+                <motion.button
+                  initial={false}
                   key={image}
+                  whileHover={{opacity: 1}}
                   onClick={() => setIndex(i)}
-                  style={{
-                    aspectRatio:
-                      i === index ? fullAspectRatio : collapsedAspectRatio,
+                  variants={{
+                    active: {
+                      aspectRatio: fullAspectRatio,
+                      marginLeft: `${margin}%`,
+                      marginRight: `${margin}%`,
+                      opacity: 1
+                    },
+                    inactive: {
+                      aspectRatio: collapsedAspectRatio,
+                      marginLeft: 0,
+                      marginRight: 0,
+                      opacity: 0.5
+
+                    },
                   }}
+                  animate={i === index ? 'active' : 'inactive'}
                   className={`shrink-0`}
                 >
                   <Image
@@ -93,7 +123,7 @@ const Carousel = () => {
                     height={1280}
                     className="h-full object-cover"
                   />
-                </button>
+                </motion.button>
               ))}
             </motion.div>
           </div>
